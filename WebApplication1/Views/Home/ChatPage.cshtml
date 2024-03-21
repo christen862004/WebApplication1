@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "ChatPage";
+}
+
+<h1>ChatPage</h1>
+
+<input type="text" class="form form-control" id="Name" placeholder="Name"/>
+<input type="text" class="form form-control" id="Msg" placeholder="Massege"/>
+<input type="text" class="form form-control" id="Age" placeholder="Age" />
+
+<input type="button" onclick="SendData()" value="Send" class="btn btn-success"/> 
+<ul id="Conv">
+
+</ul>
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="/lib/microsoft-signalr/signalr.min.js"></script>
+
+<script>
+    //1- DEclare connect any Hub
+    var hub = new signalR.HubConnectionBuilder().withUrl("/ChatH").build();
+    //2- start connection
+    hub.start().then(function () {
+        console.log("Connection Success");
+
+    });
+    //3- sever send data handel 
+    hub.on("ReciveNewMessage", function (n,m) {
+        $("#Conv").append("<li>" + n + ":" + m + "</li>");
+    })
+
+    //4- send info server
+
+
+    function SendData() {
+        var name = $("#Name").val();
+        var msg = $("#Msg").val();
+        var age = parseInt($("#Age").val());
+
+        console.log(name + "," + msg);
+        hub.invoke("SendMessage", name, msg, age);
+    }
+</script>
