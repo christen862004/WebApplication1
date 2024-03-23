@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics;
 using WebApplication1.Models;
 
@@ -10,6 +11,7 @@ namespace WebApplication1.Controllers
 
         public HomeController(ILogger<HomeController> logger)
         {
+            
             _logger = logger;
         }
         public IActionResult ChatPage()

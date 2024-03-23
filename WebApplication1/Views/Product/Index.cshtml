@@ -1,0 +1,77 @@
+﻿@model IEnumerable<WebApplication1.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="New">Create New</a>
+</p>
+<div id="div1" style="border:5px solid red">
+    new Product
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+@* <script src="/lib/microsoft-signalr/signalr.min.js"></script> *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"
+        integrity="sha512-7rhBJh1om/W5Ztx7WiYOR9h2wlSaTmPyQMoHFtbT/FVNIA12y6S6I8HY9mrBS1uJ3dSU/R3qaSAXsGYuRjMDxg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    //1- DEclare connect any Hub
+    var hub = new signalR.HubConnectionBuilder().withUrl("/ProductH").build();
+    //2- start connection
+    hub.start().then(function () {
+        console.log("Connection Success");
+
+    });
+    //3- Send adat to server(not impoertant)
+    //4- recied data from server
+    hub.on("AddProductNotify", function (obj) { 
+        console.log(obj);
+        $("#div1").append("<li>"+obj.name+"</li>")
+    });
+</script>
